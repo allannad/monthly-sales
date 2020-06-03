@@ -15,25 +15,21 @@ import pandas as pd
 import numpy
 url = 'https://raw.githubusercontent.com/prof-rossetti/intro-to-python/master/data/monthly-sales/sales-201904.csv'
 df = pd.read_csv(url, error_bad_lines=False)
-
+print(df)
 #create column for month and year of sales report
 df['year'] = pd.DatetimeIndex(df['date']).year
 #df['year'] = ['year'].apply(str)
 df['month'] = pd.DatetimeIndex(df['date']).month
 df['monthname'] = pd.to_datetime(df['month'], format='%m').dt.month_name()
 #df['monthyear'] = df['monthname'] + df['year']
-
+print(df)
 #get month name as variable
 month = df.at[0,'monthname']
 
 #get year as variable
 year = df.at[0,'year']
 
-#create revenue column = (units sold * sales price)
-df["revenue"] = df["units sold"] * df["sales price"]
-
-#sum and format the revenue column
-revenue = df["revenue"].sum() 
+revenue = df["sales price"].sum() 
 df["formattedrevenue"] = to_usd(revenue)
 
 #print beginning of report
@@ -43,7 +39,7 @@ print("TOTAL SALES",to_usd(revenue))
 #identify Top selling products:
 #create new df of items with the max units sold
 pdsales = df.groupby(['product'], as_index=False).sum()
-pdsales["revenue"] = pdsales["units sold"] * pdsales["sales price"]
+pdsales["revenue"] = pdsales["sales price"]
 pdsales["formattedrevenue"] = pdsales["revenue"].apply(to_usd)
 
 #sort them by top sellers
